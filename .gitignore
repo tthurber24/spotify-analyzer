@@ -1,0 +1,11 @@
+# ignore virtual environment
+venv/
+
+# ignore cache file
+.cache
+
+# ignore testing outputs file
+outputs.txt
+
+# ignore other files
+.DS_Store
