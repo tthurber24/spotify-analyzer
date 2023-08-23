@@ -1,35 +1,26 @@
 Tai Thurber
 Music App Project
 
-- Required libraries: spotipy, matplotlib, numpy, python-dateutil
+- Required libraries: spotipy, matplotlib, python-dateutil
 
-- export SPOTIPY_CLIENT_ID='0e74cbd0f44c483ebaa65da4d27df74e'
-- export SPOTIPY_REDIRECT_URI='http://localhost:3000'
+Environment variables
+- SPOTIPY_CLIENT_ID='0e74cbd0f44c483ebaa65da4d27df74e'
+- SPOTIPY_REDIRECT_URI='http://localhost:3000'
 
-Goal:
-- Graph a user's changing music taste over time
+Features:
+- Visualizes data from a user's liked songs from the last six months
+- Utilizes Spotify's Auth2.0 authorization framework with authorization code and PKCE flow to authenticate users and eliminate the need for a hard-coded secret key
+- No user data is stored
 
-Structure:
-- List of "liked song" objects
-    - Attributes
-        - Date added
-        - Name
-        - Features
-    - Can return a "data point"
-        - x: date added
-        - y: feature
-- Features that can be graphed:
-    - Scatterplot
+Input instructions:
+- Run python3 main.py (feature)
+    - The provided "feature" should be one of these options:
         - Acousticness
         - Danceability
-        - Duration (milliseconds)
         - Energy
         - Instrumentalness
         - Liveness
-        - Loudness (decibels, between 0 and -60)
+        - Loudness
         - Speechiness
-        - Tempo (beats per minute)
-        - Valence
-    - Bar graph
-        - Key (pitch class notation)
-
+        - Tempo
+        - Valence (musical positiveness)

@@ -2,9 +2,9 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-import numpy as np
 import spotipy
 from spotipy import SpotifyPKCE
+import sys
 
 class Liked_song:
     def __init__(self, date_added, track_data): # date_added is a datetime object, track_data comes from the liked songs API request
@@ -71,6 +71,28 @@ def get_data_set(feature_str, liked_songs: list, features: dict): # returns data
         values.append(song_features[feature_str])
     return dates, values
 
+def build_graph(x_values, y_values, feature_str: str):
+    fig, ax = plt.subplots()
+    ax.plot_date(x_values, y_values, 'o')
+    plt.xticks(rotation=30)
+    plt.title("{} of the last 6 months of your liked songs".format(feature_str.capitalize()))
+    new_y_ticks = [min(y_values), max(y_values)]
+    new_y_labels = [plt.text(0, new_y_ticks[0], "Lowest"), plt.text(0, new_y_ticks[1], "Highest")]
+    plt.yticks(ticks=new_y_ticks, labels=new_y_labels)
+    plt.show()
+
+def print_feedback(sp: spotipy.Spotify):
+    pitch_class = ["C", "C-sharp", "D", "D-sharp", "E", "F", "F-sharp", "G", "G-sharp", "A", "A-sharp", "B"]
+
+    print("Loading your data from Spotify...")
+    last_six = liked_songs_last_six(sp)
+    print("Getting the musical attributes for each song...")
+    features = get_track_features(last_six, sp)
+    selected_feature = sys.argv[1].lower()
+
+    dates, feature_vals = get_data_set(selected_feature, last_six, features)
+    build_graph(dates, feature_vals, selected_feature)
+
 def main():
     client_id = '0e74cbd0f44c483ebaa65da4d27df74e'
     redirect_uri = 'http://localhost:3000'
@@ -79,21 +101,23 @@ def main():
     pkce = SpotifyPKCE(client_id=client_id, redirect_uri=redirect_uri, scope=scope)
     sp = spotipy.Spotify(auth_manager=pkce)
 
-    pitch_class = ["C", "C-sharp", "D", "D-sharp", "E", "F", "F-sharp", "G", "G-sharp", "A", "A-sharp", "B"]
+    print_feedback(sp)
 
-    last_six = liked_songs_last_six(sp)
-    features = get_track_features(last_six, sp)
+    # last_six = liked_songs_last_six(sp)
+    # features = get_track_features(last_six, sp)
 
-    dates, speechiness_vals = get_data_set('speechiness', last_six, features)
+    # dates, speechiness_vals = get_data_set('speechiness', last_six, features)
 
-    fig, ax = plt.subplots()
-    ax.plot_date(dates, speechiness_vals, 'o')
-    plt.xticks(rotation=40)
-    plt.title("Speechiness of the last 6 months of your liked songs")
-    new_y_ticks = [min(speechiness_vals), max(speechiness_vals)]
-    new_y_labels = [plt.text(0, new_y_ticks[0], "Lowest\nspeechiness"), plt.text(0, new_y_ticks[1], "Highest\nspeechiness")]
-    plt.yticks(ticks=new_y_ticks, labels=new_y_labels, rotation=40)
-    plt.tight_layout
+    # build_graph(dates, speechiness_vals, 'speechiness')
+
+    # fig, ax = plt.subplots()
+    # ax.plot_date(dates, speechiness_vals, 'o')
+    # plt.xticks(rotation=40)
+    # plt.title("Speechiness of the last 6 months of your liked songs")
+    # new_y_ticks = [min(speechiness_vals), max(speechiness_vals)]
+    # new_y_labels = [plt.text(0, new_y_ticks[0], "Lowest\nspeechiness"), plt.text(0, new_y_ticks[1], "Highest\nspeechiness")]
+    # plt.yticks(ticks=new_y_ticks, labels=new_y_labels, rotation=40)
+    # plt.tight_layout
     
     # new_y_ticks = []
     # new_y_ticks.append(0.0)
@@ -105,7 +129,6 @@ def main():
     # plt.yticks(ticks=new_y_ticks, labels=new_y_labels)
 
     # plt.yticks([0, 0.2, 0.4, 0.6, 0.8, 1], ["Lowest\ndanceability", "0.2", "0.4", "0.6", "0.8", "Highest\ndanceability"])
-    plt.show()
 
     # dates, energy_vals = get_data_set('energy', last_six, features)
     # plt.plot_date(dates, energy_vals, 'o')

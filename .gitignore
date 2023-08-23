@@ -4,8 +4,9 @@ venv/
 # ignore cache file
 .cache
 
-# ignore testing outputs file
+# ignore testing files
 outputs.txt
+structure.txt
 
 # ignore other files
 .DS_Store
