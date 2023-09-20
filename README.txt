@@ -1,8 +1,6 @@
 Tai Thurber
 Music App Project
 
-- Required libraries: spotipy, matplotlib, python-dateutil
-
 Features:
 - Visualizes data from a user's liked songs from the last six months
 - Utilizes Spotify's Auth2.0 authorization framework with authorization code and PKCE flow to authenticate users and eliminate the need for a hard-coded secret key
